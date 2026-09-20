@@ -1,0 +1,3046 @@
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#060812" />
+
+    <title>Xtrake Software | Sistemas para Restaurantes</title>
+
+    <meta
+      name="description"
+      content="Xtrake Software — soluções digitais para restaurantes. Sites, pedidos online, painéis administrativos e sistemas personalizados."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" type="image/png" href="./favicon.png">
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #050711;
+        --bg-2: #080b16;
+        --surface: #0b1020;
+        --surface-2: #10162a;
+        --surface-3: #151c33;
+
+        --primary: #6172ff;
+        --primary-2: #8794ff;
+        --primary-3: #b5bcff;
+
+        --text: #f2f4ff;
+        --muted: #8992ad;
+        --muted-2: #68718c;
+
+        --border: rgba(145, 157, 255, 0.13);
+        --border-hover: rgba(145, 157, 255, 0.3);
+
+        --success: #6ee7b7;
+        --warning: #facc15;
+
+        --gradient: linear-gradient(
+          120deg,
+          #4d5df3 0%,
+          #6978ff 50%,
+          #9ca6ff 100%
+        );
+
+        --gradient-text: linear-gradient(
+          100deg,
+          #6172ff,
+          #b4bbff,
+          #ffffff,
+          #a2acff,
+          #6172ff
+        );
+
+        --container: 1180px;
+        --radius: 18px;
+        --radius-lg: 26px;
+
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+        --font-display: 'Sora', sans-serif;
+        --font-body: 'Inter', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 90px;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-body);
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body.menu-open {
+        overflow: hidden;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        border: 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      ::selection {
+        background: rgba(97, 114, 255, 0.4);
+      }
+
+      /* ========================================
+       BACKGROUND
+    ======================================== */
+
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -10;
+        pointer-events: none;
+
+        background-image:
+          linear-gradient(rgba(145, 157, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(145, 157, 255, 0.025) 1px,
+            transparent 1px
+          );
+
+        background-size: 70px 70px;
+
+        mask-image: linear-gradient(to bottom, #000 0%, transparent 80%);
+      }
+
+      .aurora {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: -9;
+      }
+
+      .aurora span {
+        position: absolute;
+        width: 550px;
+        height: 550px;
+        border-radius: 50%;
+        filter: blur(130px);
+        opacity: 0.15;
+        animation: floatAurora 18s ease-in-out infinite alternate;
+      }
+
+      .aurora span:nth-child(1) {
+        top: -300px;
+        left: 25%;
+        background: #596aff;
+      }
+
+      .aurora span:nth-child(2) {
+        right: -300px;
+        top: 30%;
+        background: #806aff;
+        animation-delay: -5s;
+      }
+
+      .aurora span:nth-child(3) {
+        left: -300px;
+        bottom: -300px;
+        background: #4f67ff;
+        animation-delay: -9s;
+      }
+
+      @keyframes floatAurora {
+        to {
+          transform: translate(80px, -50px) scale(1.2);
+        }
+      }
+
+      #particles {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -8;
+        pointer-events: none;
+      }
+
+      .cursor-glow {
+        position: fixed;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: -1;
+
+        background: radial-gradient(
+          circle,
+          rgba(97, 114, 255, 0.12),
+          transparent 68%
+        );
+
+        transform: translate(-50%, -50%);
+      }
+
+      /* ========================================
+       LOADER
+    ======================================== */
+
+      .loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+
+        display: grid;
+        place-items: center;
+
+        background: var(--bg);
+
+        transition:
+          opacity 0.8s var(--ease),
+          visibility 0.8s;
+      }
+
+      body.loaded .loader {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loader-content {
+        text-align: center;
+      }
+
+      .loader-logo {
+        font-family: var(--font-display);
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -0.06em;
+        margin-bottom: 25px;
+      }
+
+      .loader-logo span {
+        color: var(--primary-2);
+      }
+
+      .loader-line {
+        width: 170px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        margin: auto;
+      }
+
+      .loader-line::after {
+        content: '';
+        display: block;
+        height: 100%;
+        width: 100%;
+        background: var(--gradient);
+        transform: translateX(-100%);
+        animation: loader 1.5s var(--ease) forwards;
+      }
+
+      @keyframes loader {
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      /* ========================================
+       HEADER
+    ======================================== */
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 500;
+
+        transition: 0.4s ease;
+      }
+
+      header.scrolled {
+        background: rgba(5, 7, 17, 0.72);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      nav {
+        width: min(calc(100% - 40px), var(--container));
+        height: 78px;
+        margin: auto;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+
+        font-family: var(--font-display);
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+      }
+
+      .logo-mark {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+
+        border-radius: 10px;
+
+        background: linear-gradient(
+          135deg,
+          rgba(97, 114, 255, 0.25),
+          rgba(97, 114, 255, 0.05)
+        );
+
+        border: 1px solid rgba(135, 148, 255, 0.3);
+
+        color: var(--primary-3);
+
+        transition: 0.4s var(--ease);
+      }
+
+      .logo:hover .logo-mark {
+        transform: rotate(-7deg) scale(1.08);
+        box-shadow: 0 0 35px rgba(97, 114, 255, 0.25);
+      }
+
+      .logo-mark svg {
+        width: 19px;
+      }
+
+      .logo span {
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .nav-links a {
+        position: relative;
+        transition: 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: white;
+      }
+
+      .nav-links a:not(.nav-cta)::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 100%;
+        height: 2px;
+
+        background: var(--gradient);
+
+        transform: scaleX(0);
+        transform-origin: right;
+
+        transition: 0.4s var(--ease);
+      }
+
+      .nav-links a:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+
+      .nav-cta {
+        padding: 10px 17px;
+        border-radius: 9px;
+
+        color: white !important;
+
+        background: rgba(97, 114, 255, 0.12);
+        border: 1px solid rgba(97, 114, 255, 0.35);
+
+        transition: 0.3s ease;
+      }
+
+      .nav-cta:hover {
+        background: rgba(97, 114, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(97, 114, 255, 0.18);
+      }
+
+      .menu-btn {
+        display: none;
+        width: 44px;
+        height: 44px;
+      }
+
+      .menu-btn span {
+        display: block;
+        width: 21px;
+        height: 2px;
+        margin: 5px auto;
+
+        background: white;
+
+        transition: 0.3s ease;
+      }
+
+      /* ========================================
+       GLOBAL
+    ======================================== */
+
+      section {
+        width: min(calc(100% - 40px), var(--container));
+        margin: auto;
+        padding: 120px 0;
+      }
+
+      .section-header {
+        max-width: 720px;
+        margin-bottom: 65px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        margin-bottom: 20px;
+
+        color: var(--primary-3);
+        font-family: var(--font-mono);
+        font-size: 12px;
+      }
+
+      .eyebrow::before {
+        content: '';
+        width: 25px;
+        height: 1px;
+        background: var(--primary);
+      }
+
+      .section-title {
+        font-family: var(--font-display);
+        font-size: clamp(34px, 4vw, 55px);
+        line-height: 1.08;
+        letter-spacing: -0.05em;
+        margin-bottom: 20px;
+      }
+
+      .section-description {
+        color: var(--muted);
+        line-height: 1.8;
+        font-size: 16px;
+      }
+
+      .gradient-text {
+        background: var(--gradient-text);
+        background-size: 250% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradientMove 6s linear infinite;
+      }
+
+      @keyframes gradientMove {
+        to {
+          background-position: -250% 0;
+        }
+      }
+
+      /* ========================================
+       BUTTONS
+    ======================================== */
+
+      .btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        padding: 15px 22px;
+
+        border-radius: 11px;
+
+        font-size: 13px;
+        font-weight: 600;
+
+        overflow: hidden;
+
+        transition:
+          transform 0.35s var(--ease),
+          box-shadow 0.35s ease,
+          border-color 0.35s ease,
+          background 0.35s ease;
+      }
+
+      .btn-primary {
+        color: white;
+        background: var(--gradient);
+        box-shadow: 0 15px 45px rgba(97, 114, 255, 0.25);
+      }
+
+      .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -120%;
+        width: 80%;
+        height: 100%;
+
+        background: linear-gradient(
+          100deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+
+        transform: skewX(-20deg);
+        transition: 0.7s;
+      }
+
+      .btn-primary:hover::before {
+        left: 130%;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 60px rgba(97, 114, 255, 0.4);
+      }
+
+      .btn-secondary {
+        color: var(--text);
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.025);
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-3px);
+        border-color: var(--border-hover);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .arrow {
+        transition: 0.35s var(--ease);
+      }
+
+      .btn:hover .arrow {
+        transform: translateX(5px);
+      }
+
+      /* ========================================
+       HERO
+    ======================================== */
+
+      .hero {
+        min-height: 100vh;
+        min-height: 100svh;
+
+        width: min(calc(100% - 40px), var(--container));
+
+        margin: auto;
+
+        display: flex;
+        align-items: center;
+
+        padding-top: 120px;
+
+        position: relative;
+      }
+
+      .hero-content {
+        max-width: 730px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .cases {
+        padding: 120px 6%;
+      }
+
+      .section-header {
+        max-width: 720px;
+        margin-bottom: 55px;
+      }
+
+      .section-tag {
+        display: inline-block;
+        margin-bottom: 16px;
+        color: #5ea7ff;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        letter-spacing: 2px;
+      }
+
+      .section-header h2 {
+        margin: 0 0 18px;
+        font-size: clamp(36px, 5vw, 64px);
+        line-height: 1.05;
+      }
+
+      .section-header p {
+        margin: 0;
+        color: #8f9bad;
+        font-size: 17px;
+        line-height: 1.7;
+      }
+
+      /* GRID DOS CARDS */
+
+      .cases-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px;
+      }
+
+      /* CARD */
+
+      .case-card {
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.025);
+
+        transition:
+          transform 0.4s ease,
+          border-color 0.4s ease,
+          box-shadow 0.4s ease;
+      }
+
+      .case-card:hover {
+        transform: translateY(-10px);
+
+        border-color: rgba(94, 167, 255, 0.35);
+
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+      }
+
+      /* IMAGEM */
+
+      .case-image {
+        position: relative;
+        width: 100%;
+        height: 750px;
+        overflow: hidden;
+        background: #080d16;
+      }
+
+      .case-image img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.7s ease;
+      }
+
+      .case-card:hover .case-image img {
+        transform: scale(1.06);
+      }
+
+      /* GRADIENTE POR CIMA DA IMAGEM */
+
+      .case-image::after {
+        content: '';
+
+        position: absolute;
+        inset: 0;
+
+        background: linear-gradient(
+          to top,
+          rgba(5, 8, 14, 0.75),
+          transparent 55%
+        );
+
+        pointer-events: none;
+      }
+
+      /* BADGE */
+
+      .case-badge {
+        position: absolute;
+
+        left: 22px;
+        bottom: 20px;
+
+        z-index: 2;
+
+        padding: 8px 13px;
+
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+
+        background: rgba(5, 8, 14, 0.65);
+
+        backdrop-filter: blur(12px);
+
+        color: #fff;
+
+        font-size: 12px;
+      }
+
+      /* CONTEÚDO */
+
+      .case-content {
+        padding: 30px;
+      }
+
+      .case-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 17px;
+      }
+
+      .case-category {
+        color: #5ea7ff;
+
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+      }
+
+      .case-number {
+        color: #4d5868;
+
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+      }
+
+      .case-content h3 {
+        margin: 0 0 12px;
+
+        font-size: 30px;
+        line-height: 1.1;
+      }
+
+      .case-content p {
+        margin: 0 0 25px;
+
+        color: #8f9bad;
+
+        line-height: 1.7;
+      }
+
+      /* TECNOLOGIAS */
+
+      .case-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .case-tech span {
+        padding: 7px 10px;
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+
+        background: rgba(255, 255, 255, 0.025);
+
+        color: #aeb8c7;
+
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+      }
+
+      /* RESPONSIVO */
+
+      @media (max-width: 800px) {
+        .cases {
+          padding: 80px 5%;
+        }
+
+        .cases-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .case-image {
+          height: 280px;
+        }
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+
+        padding: 8px 13px;
+        margin-bottom: 25px;
+
+        border: 1px solid rgba(110, 231, 183, 0.18);
+        background: rgba(110, 231, 183, 0.04);
+
+        border-radius: 999px;
+
+        color: #9be8c9;
+        font-family: var(--font-mono);
+        font-size: 11px;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--success);
+
+        box-shadow: 0 0 15px var(--success);
+
+        animation: statusPulse 2s infinite;
+      }
+
+      @keyframes statusPulse {
+        50% {
+          box-shadow: 0 0 25px rgba(110, 231, 183, 0.1);
+        }
+      }
+
+      .hero h1 {
+        font-family: var(--font-display);
+        font-size: clamp(47px, 7vw, 88px);
+        line-height: 1.02;
+        letter-spacing: -0.065em;
+
+        margin-bottom: 25px;
+      }
+
+      .hero h1 .line {
+        display: block;
+      }
+
+      .hero-description {
+        max-width: 620px;
+
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.8;
+
+        margin-bottom: 34px;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .hero-note {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin-top: 25px;
+
+        color: var(--muted-2);
+        font-size: 12px;
+      }
+
+      .hero-note span {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--primary-2);
+      }
+
+      /* HERO DASHBOARD */
+
+      .hero-dashboard {
+        position: absolute;
+
+        right: -60px;
+        top: 50%;
+
+        width: 500px;
+        height: 430px;
+
+        transform: translateY(-50%) rotateY(-12deg) rotateX(5deg);
+
+        perspective: 1000px;
+
+        pointer-events: none;
+      }
+
+      .dashboard {
+        position: absolute;
+        inset: 0;
+
+        padding: 18px;
+
+        border-radius: 20px;
+
+        background: linear-gradient(
+          145deg,
+          rgba(18, 25, 48, 0.95),
+          rgba(7, 10, 21, 0.96)
+        );
+
+        border: 1px solid rgba(145, 157, 255, 0.16);
+
+        box-shadow:
+          -40px 40px 100px rgba(0, 0, 0, 0.45),
+          0 0 80px rgba(97, 114, 255, 0.08);
+
+        animation: dashboardFloat 7s ease-in-out infinite;
+      }
+
+      @keyframes dashboardFloat {
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+
+      .dash-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding-bottom: 15px;
+
+        border-bottom: 1px solid var(--border);
+      }
+
+      .dash-brand {
+        font-family: var(--font-display);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .dash-dots {
+        display: flex;
+        gap: 5px;
+      }
+
+      .dash-dots i {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--muted-2);
+      }
+
+      .dash-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+
+        padding-top: 15px;
+      }
+
+      .dash-card {
+        padding: 15px;
+
+        border: 1px solid var(--border);
+        border-radius: 12px;
+
+        background: rgba(255, 255, 255, 0.025);
+      }
+
+      .dash-card.full {
+        grid-column: 1 / -1;
+      }
+
+      .dash-label {
+        color: var(--muted);
+        font-size: 9px;
+        margin-bottom: 7px;
+      }
+
+      .dash-number {
+        font-family: var(--font-display);
+        font-size: 23px;
+        font-weight: 700;
+      }
+
+      .dash-green {
+        color: var(--success);
+        font-size: 9px;
+      }
+
+      .orders {
+        display: grid;
+        gap: 8px;
+      }
+
+      .order {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 10px;
+
+        border-radius: 9px;
+        background: rgba(255, 255, 255, 0.025);
+      }
+
+      .order-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .order-icon {
+        width: 25px;
+        height: 25px;
+        display: grid;
+        place-items: center;
+
+        border-radius: 7px;
+
+        background: rgba(97, 114, 255, 0.13);
+        color: var(--primary-3);
+
+        font-size: 10px;
+      }
+
+      .order strong {
+        display: block;
+        font-size: 9px;
+      }
+
+      .order small {
+        color: var(--muted);
+        font-size: 8px;
+      }
+
+      .order-status {
+        padding: 4px 7px;
+        border-radius: 999px;
+
+        background: rgba(110, 231, 183, 0.08);
+        color: var(--success);
+
+        font-size: 7px;
+      }
+
+      /* ========================================
+       STATS
+    ======================================== */
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .stat {
+        padding: 35px 25px;
+        text-align: center;
+
+        border-right: 1px solid var(--border);
+      }
+
+      .stat:last-child {
+        border-right: 0;
+      }
+
+      .stat-number {
+        font-family: var(--font-display);
+        font-size: 31px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      /* ========================================
+       SERVICES
+    ======================================== */
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+
+      .service {
+        position: relative;
+
+        min-height: 270px;
+
+        padding: 27px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+
+        background: linear-gradient(
+          145deg,
+          rgba(17, 23, 43, 0.7),
+          rgba(9, 12, 23, 0.7)
+        );
+
+        overflow: hidden;
+
+        transition:
+          transform 0.5s var(--ease),
+          border-color 0.4s ease,
+          box-shadow 0.5s ease;
+      }
+
+      .service::before {
+        content: '';
+
+        position: absolute;
+        width: 180px;
+        height: 180px;
+
+        top: -100px;
+        right: -100px;
+
+        border-radius: 50%;
+
+        background: rgba(97, 114, 255, 0.14);
+
+        filter: blur(35px);
+
+        transition: 0.6s ease;
+      }
+
+      .service:hover {
+        transform: translateY(-8px);
+        border-color: var(--border-hover);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+      }
+
+      .service:hover::before {
+        transform: scale(1.6);
+      }
+
+      .service-icon {
+        width: 48px;
+        height: 48px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 13px;
+
+        margin-bottom: 24px;
+
+        background: rgba(97, 114, 255, 0.1);
+        border: 1px solid rgba(97, 114, 255, 0.2);
+
+        color: var(--primary-3);
+
+        transition: 0.4s var(--ease);
+      }
+
+      .service:hover .service-icon {
+        transform: rotate(-5deg) scale(1.08);
+        background: rgba(97, 114, 255, 0.18);
+      }
+
+      .service h3 {
+        font-family: var(--font-display);
+        font-size: 17px;
+        margin-bottom: 11px;
+      }
+
+      .service p {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .service-number {
+        position: absolute;
+        right: 22px;
+        bottom: 20px;
+
+        color: rgba(255, 255, 255, 0.05);
+
+        font-family: var(--font-display);
+        font-size: 40px;
+        font-weight: 700;
+      }
+
+      /* ========================================
+       SOLUTIONS
+    ======================================== */
+
+      .solutions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+
+      .solution {
+        position: relative;
+
+        padding: 32px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+
+        background: linear-gradient(
+          150deg,
+          rgba(16, 22, 42, 0.85),
+          rgba(7, 10, 20, 0.95)
+        );
+
+        transition: 0.5s var(--ease);
+      }
+
+      .solution:hover {
+        transform: translateY(-8px);
+        border-color: rgba(135, 148, 255, 0.35);
+      }
+
+      .solution.featured {
+        border-color: rgba(97, 114, 255, 0.4);
+
+        box-shadow: 0 0 70px rgba(97, 114, 255, 0.08);
+      }
+
+      .solution.featured::before {
+        content: 'MAIS COMPLETO';
+
+        position: absolute;
+        top: 18px;
+        right: 18px;
+
+        padding: 6px 9px;
+
+        border-radius: 999px;
+
+        background: rgba(97, 114, 255, 0.12);
+        border: 1px solid rgba(97, 114, 255, 0.25);
+
+        color: var(--primary-3);
+
+        font-family: var(--font-mono);
+        font-size: 8px;
+      }
+
+      .solution-tag {
+        color: var(--primary-3);
+        font-family: var(--font-mono);
+        font-size: 10px;
+
+        margin-bottom: 18px;
+      }
+
+      .solution h3 {
+        font-family: var(--font-display);
+        font-size: 24px;
+        margin-bottom: 13px;
+      }
+
+      .solution > p {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+        min-height: 67px;
+      }
+
+      .solution-price {
+        margin: 25px 0;
+
+        font-family: var(--font-display);
+        font-size: 25px;
+        font-weight: 700;
+      }
+
+      .solution-price small {
+        color: var(--muted);
+        font-family: var(--font-body);
+        font-size: 11px;
+        font-weight: 400;
+      }
+
+      .solution ul {
+        list-style: none;
+
+        display: grid;
+        gap: 11px;
+
+        margin-bottom: 28px;
+      }
+
+      .solution li {
+        display: flex;
+        gap: 9px;
+
+        color: #c3c8dc;
+        font-size: 12px;
+      }
+
+      .solution li::before {
+        content: '✓';
+
+        color: var(--success);
+        font-weight: 700;
+      }
+
+      .solution .btn {
+        width: 100%;
+      }
+
+      /* ========================================
+       PROCESS
+    ======================================== */
+
+      .process {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+
+        counter-reset: process;
+      }
+
+      .process-item {
+        position: relative;
+
+        padding: 28px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+
+        background: rgba(255, 255, 255, 0.018);
+
+        transition: 0.4s var(--ease);
+      }
+
+      .process-item:hover {
+        transform: translateY(-6px);
+        background: rgba(255, 255, 255, 0.035);
+      }
+
+      .process-number {
+        display: inline-grid;
+        place-items: center;
+
+        width: 35px;
+        height: 35px;
+
+        border-radius: 10px;
+
+        margin-bottom: 24px;
+
+        background: rgba(97, 114, 255, 0.1);
+        border: 1px solid rgba(97, 114, 255, 0.2);
+
+        color: var(--primary-3);
+
+        font-family: var(--font-mono);
+        font-size: 11px;
+      }
+
+      .process h3 {
+        font-family: var(--font-display);
+        font-size: 15px;
+        margin-bottom: 10px;
+      }
+
+      .process p {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      /* ========================================
+       RESTAURANT SYSTEM DEMO
+    ======================================== */
+
+      .system-showcase {
+        position: relative;
+
+        display: grid;
+        grid-template-columns: 0.85fr 1.15fr;
+        gap: 45px;
+
+        align-items: center;
+      }
+
+      .system-copy h2 {
+        font-family: var(--font-display);
+        font-size: clamp(32px, 4vw, 51px);
+        line-height: 1.08;
+        letter-spacing: -0.05em;
+
+        margin-bottom: 20px;
+      }
+
+      .system-copy p {
+        color: var(--muted);
+        line-height: 1.8;
+        font-size: 14px;
+        margin-bottom: 27px;
+      }
+
+      .system-features {
+        display: grid;
+        gap: 13px;
+      }
+
+      .system-feature {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        color: #c7cbdb;
+        font-size: 12px;
+      }
+
+      .system-feature i {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--primary-2);
+        box-shadow: 0 0 14px rgba(135, 148, 255, 0.7);
+      }
+
+      .system-window {
+        padding: 10px;
+
+        border-radius: 20px;
+
+        border: 1px solid var(--border);
+
+        background: #080c18;
+
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.35);
+      }
+
+      .window-bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 8px 10px 14px;
+      }
+
+      .window-bar i {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .window-content {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        min-height: 330px;
+      }
+
+      .sidebar {
+        padding: 15px 9px;
+
+        border-radius: 12px;
+
+        background: #0c1222;
+      }
+
+      .sidebar-logo {
+        padding: 10px;
+
+        color: var(--primary-3);
+
+        font-family: var(--font-display);
+        font-size: 10px;
+        font-weight: 700;
+
+        margin-bottom: 20px;
+      }
+
+      .side-item {
+        padding: 9px 10px;
+
+        border-radius: 7px;
+
+        color: var(--muted);
+        font-size: 8px;
+
+        margin-bottom: 5px;
+      }
+
+      .side-item.active {
+        color: white;
+        background: rgba(97, 114, 255, 0.14);
+      }
+
+      .panel {
+        padding: 22px;
+      }
+
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      .panel-head h4 {
+        font-family: var(--font-display);
+        font-size: 14px;
+      }
+
+      .panel-date {
+        color: var(--muted);
+        font-size: 8px;
+      }
+
+      .mini-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+
+        margin-bottom: 12px;
+      }
+
+      .mini-stat {
+        padding: 12px;
+
+        border-radius: 9px;
+
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .mini-stat small {
+        display: block;
+        color: var(--muted);
+        font-size: 7px;
+        margin-bottom: 5px;
+      }
+
+      .mini-stat strong {
+        font-family: var(--font-display);
+        font-size: 14px;
+      }
+
+      .chart {
+        height: 115px;
+
+        display: flex;
+        align-items: end;
+        gap: 6px;
+
+        padding: 15px;
+
+        border-radius: 10px;
+
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.015);
+
+        margin-bottom: 12px;
+      }
+
+      .bar {
+        flex: 1;
+
+        border-radius: 4px 4px 1px 1px;
+
+        background: var(--gradient);
+
+        opacity: 0.8;
+
+        transform-origin: bottom;
+
+        animation: chartGrow 2s var(--ease) infinite alternate;
+      }
+
+      @keyframes chartGrow {
+        from {
+          transform: scaleY(0.7);
+        }
+        to {
+          transform: scaleY(1);
+        }
+      }
+
+      .bar:nth-child(1) {
+        height: 32%;
+      }
+      .bar:nth-child(2) {
+        height: 50%;
+      }
+      .bar:nth-child(3) {
+        height: 40%;
+      }
+      .bar:nth-child(4) {
+        height: 68%;
+      }
+      .bar:nth-child(5) {
+        height: 58%;
+      }
+      .bar:nth-child(6) {
+        height: 84%;
+      }
+      .bar:nth-child(7) {
+        height: 72%;
+      }
+      .bar:nth-child(8) {
+        height: 92%;
+      }
+
+      /* ========================================
+       PROJECTS
+    ======================================== */
+
+      .projects {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .project {
+        position: relative;
+
+        min-height: 370px;
+
+        padding: 30px;
+
+        overflow: hidden;
+
+        border-radius: var(--radius-lg);
+
+        border: 1px solid var(--border);
+
+        background:
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(97, 114, 255, 0.13),
+            transparent 35%
+          ),
+          #0b1020;
+
+        transition: 0.5s var(--ease);
+      }
+
+      .project:hover {
+        transform: translateY(-8px);
+        border-color: var(--border-hover);
+      }
+
+      .project-visual {
+        position: absolute;
+        right: 25px;
+        top: 40px;
+
+        width: 230px;
+        height: 160px;
+
+        border-radius: 12px;
+
+        background: linear-gradient(145deg, #131b34, #080b16);
+
+        border: 1px solid var(--border);
+
+        transform: rotate(5deg);
+
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+
+        transition: 0.6s var(--ease);
+      }
+
+      .project:hover .project-visual {
+        transform: rotate(0deg) translateY(-8px);
+      }
+
+      .project-screen {
+        padding: 10px;
+      }
+
+      .screen-top {
+        height: 12px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 10px;
+      }
+
+      .screen-lines {
+        display: grid;
+        gap: 6px;
+      }
+
+      .screen-line {
+        height: 7px;
+        width: 70%;
+        border-radius: 4px;
+        background: rgba(135, 148, 255, 0.13);
+      }
+
+      .screen-line:nth-child(2) {
+        width: 90%;
+      }
+
+      .screen-line:nth-child(3) {
+        width: 50%;
+      }
+
+      .project-content {
+        position: absolute;
+        left: 30px;
+        bottom: 30px;
+
+        max-width: 400px;
+      }
+
+      .project-tag {
+        color: var(--primary-3);
+        font-family: var(--font-mono);
+        font-size: 10px;
+
+        margin-bottom: 10px;
+      }
+
+      .project h3 {
+        font-family: var(--font-display);
+        font-size: 24px;
+        margin-bottom: 9px;
+      }
+
+      .project p {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      /* ========================================
+       TECHNOLOGY
+    ======================================== */
+
+      .tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+      }
+
+      .tech span {
+        padding: 10px 14px;
+
+        border: 1px solid var(--border);
+        border-radius: 9px;
+
+        color: #b7bdd2;
+
+        background: rgba(255, 255, 255, 0.02);
+
+        font-family: var(--font-mono);
+        font-size: 10px;
+
+        transition: 0.3s ease;
+      }
+
+      .tech span:hover {
+        color: white;
+        border-color: rgba(135, 148, 255, 0.35);
+        background: rgba(97, 114, 255, 0.08);
+        transform: translateY(-3px);
+      }
+
+      /* ========================================
+       CTA
+    ======================================== */
+
+      .cta {
+        position: relative;
+
+        padding: 80px 50px;
+
+        border-radius: 30px;
+
+        overflow: hidden;
+
+        border: 1px solid rgba(135, 148, 255, 0.2);
+
+        background:
+          radial-gradient(
+            circle at 50% 0%,
+            rgba(97, 114, 255, 0.18),
+            transparent 50%
+          ),
+          linear-gradient(145deg, #0f1529, #080b17);
+
+        text-align: center;
+      }
+
+      .cta::before {
+        content: '';
+
+        position: absolute;
+        inset: -2px;
+
+        border-radius: inherit;
+
+        background: conic-gradient(
+          from var(--angle),
+          transparent,
+          rgba(97, 114, 255, 0.5),
+          transparent 25%
+        );
+
+        animation: rotateBorder 8s linear infinite;
+
+        z-index: 0;
+        opacity: 0.3;
+      }
+
+      .cta > * {
+        position: relative;
+        z-index: 2;
+      }
+
+      @property --angle {
+        syntax: '<angle>';
+        initial-value: 0deg;
+        inherits: false;
+      }
+
+      @keyframes rotateBorder {
+        to {
+          --angle: 360deg;
+        }
+      }
+
+      .cta h2 {
+        max-width: 700px;
+        margin: auto auto 17px;
+
+        font-family: var(--font-display);
+        font-size: clamp(35px, 5vw, 57px);
+        letter-spacing: -0.05em;
+      }
+
+      .cta p {
+        max-width: 570px;
+        margin: auto auto 28px;
+
+        color: var(--muted);
+        line-height: 1.8;
+        font-size: 14px;
+      }
+
+      /* ========================================
+       FOOTER
+    ======================================== */
+
+      footer {
+        width: min(calc(100% - 40px), var(--container));
+        margin: auto;
+
+        padding: 45px 0;
+
+        border-top: 1px solid var(--border);
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+      }
+
+      footer p {
+        color: var(--muted-2);
+        font-size: 11px;
+      }
+
+      .footer-logo {
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      /* ========================================
+       REVEAL
+    ======================================== */
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(35px);
+        transition:
+          opacity 0.8s var(--ease),
+          transform 0.8s var(--ease);
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      .delay-1 {
+        transition-delay: 0.08s;
+      }
+      .delay-2 {
+        transition-delay: 0.16s;
+      }
+      .delay-3 {
+        transition-delay: 0.24s;
+      }
+
+      /* ========================================
+       MOBILE
+    ======================================== */
+
+      @media (max-width: 1000px) {
+        .hero-dashboard {
+          opacity: 0.28;
+          right: -180px;
+        }
+
+        .services-grid,
+        .solutions {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .process {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .system-showcase {
+          grid-template-columns: 1fr;
+        }
+
+        .system-window {
+          max-width: 700px;
+        }
+      }
+
+      @media (max-width: 760px) {
+        section {
+          padding: 85px 0;
+        }
+
+        .nav-links {
+          position: fixed;
+          inset: 78px 0 0;
+
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+
+          padding: 30px;
+
+          background: rgba(5, 7, 17, 0.97);
+          backdrop-filter: blur(25px);
+
+          transform: translateX(100%);
+          transition: 0.5s var(--ease);
+        }
+
+        header.menu-open .nav-links {
+          transform: translateX(0);
+        }
+
+        .menu-btn {
+          display: block;
+        }
+
+        .hero {
+          min-height: 850px;
+        }
+
+        .hero h1 {
+          font-size: clamp(43px, 13vw, 68px);
+        }
+
+        .hero-dashboard {
+          display: none;
+        }
+
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stat:nth-child(2) {
+          border-right: 0;
+        }
+
+        .stat:nth-child(-n + 2) {
+          border-bottom: 1px solid var(--border);
+        }
+
+        .services-grid,
+        .solutions,
+        .projects,
+        .process {
+          grid-template-columns: 1fr;
+        }
+
+        .project-visual {
+          opacity: 0.35;
+          right: -20px;
+        }
+
+        .window-content {
+          grid-template-columns: 75px 1fr;
+        }
+
+        .panel {
+          padding: 15px;
+        }
+
+        .cta {
+          padding: 60px 25px;
+        }
+
+        footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- LOADER -->
+
+    <div class="loader">
+      <div class="loader-content">
+        <div class="loader-logo">Xtrake<span>.</span></div>
+
+        <div class="loader-line"></div>
+      </div>
+    </div>
+
+    <!-- BACKGROUND -->
+
+    <div class="aurora">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <canvas id="particles"></canvas>
+
+    <div class="cursor-glow"></div>
+
+    <!-- HEADER -->
+
+    <header id="header">
+      <nav>
+        <a href="#inicio" class="logo">
+          <div class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 5L19 19M5 19L18 6M15 5H20V10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+          Xtrake <span>Software</span>
+        </a>
+
+        <div class="nav-links">
+          <a href="#servicos">Serviços</a>
+          <a href="#solucoes">Soluções</a>
+          <a href="#projetos">Projetos</a>
+          <a href="#tecnologia">Tecnologia</a>
+
+          <a href="#contato" class="nav-cta"> Falar com a Xtrake </a>
+        </div>
+
+        <button class="menu-btn" id="menuBtn">
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- HERO -->
+
+      <section class="hero" id="inicio">
+        <div class="hero-content">
+          <div class="status">
+            <i class="status-dot"></i>
+            SOFTWARE & TECHNOLOGY
+          </div>
+
+          <h1>
+            <span class="line"> Tecnologia para </span>
+
+            <span class="line gradient-text"> restaurantes que crescem. </span>
+          </h1>
+
+          <p class="hero-description">
+            A Xtrake Software desenvolve soluções digitais para restaurantes,
+            lanchonetes e negócios de alimentação — de sites profissionais a
+            sistemas completos de pedidos, gestão e operação.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#solucoes" class="btn btn-primary">
+              Conhecer soluções
+              <span class="arrow">→</span>
+            </a>
+
+            <a href="#projetos" class="btn btn-secondary"> Ver projetos </a>
+          </div>
+
+          <div class="hero-note">
+            <span></span>
+            Sistemas pensados para acompanhar o crescimento do negócio
+          </div>
+        </div>
+
+        <!-- DASHBOARD VISUAL -->
+
+        <div class="hero-dashboard">
+          <div class="dashboard">
+            <div class="dash-top">
+              <div class="dash-brand">Xtrake / Restaurant OS</div>
+
+              <div class="dash-dots">
+                <i></i>
+                <i></i>
+                <i></i>
+              </div>
+            </div>
+
+            <div class="dash-body">
+              <div class="dash-card">
+                <div class="dash-label">PEDIDOS HOJE</div>
+
+                <div class="dash-number">128</div>
+
+                <div class="dash-green">+18.4%</div>
+              </div>
+
+              <div class="dash-card">
+                <div class="dash-label">FATURAMENTO</div>
+
+                <div class="dash-number">R$ 4.8k</div>
+
+                <div class="dash-green">+12.7%</div>
+              </div>
+
+              <div class="dash-card full">
+                <div class="dash-label">PEDIDOS RECENTES</div>
+
+                <div class="orders">
+                  <div class="order">
+                    <div class="order-left">
+                      <div class="order-icon">#</div>
+
+                      <div>
+                        <strong>Pedido #1042</strong>
+                        <small>2x Burger + Batata</small>
+                      </div>
+                    </div>
+
+                    <span class="order-status"> PREPARANDO </span>
+                  </div>
+
+                  <div class="order">
+                    <div class="order-left">
+                      <div class="order-icon">#</div>
+
+                      <div>
+                        <strong>Pedido #1041</strong>
+                        <small>1x Combo Especial</small>
+                      </div>
+                    </div>
+
+                    <span class="order-status"> NA FILA </span>
+                  </div>
+
+                  <div class="order">
+                    <div class="order-left">
+                      <div class="order-icon">#</div>
+
+                      <div>
+                        <strong>Pedido #1040</strong>
+                        <small>3x Marmita P</small>
+                      </div>
+                    </div>
+
+                    <span class="order-status"> ENTREGUE </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATS -->
+
+      <section style="padding-top: 20px; padding-bottom: 40px">
+        <div class="stats reveal">
+          <div class="stat">
+            <div class="stat-number counter" data-target="2">0</div>
+            <div class="stat-label">projetos em destaque</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">desenvolvimento personalizado</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-number">API</div>
+            <div class="stat-label">arquiteturas integráveis</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">sistemas preparados para operação</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVIÇOS -->
+
+      <section id="servicos">
+        <div class="section-header reveal">
+          <div class="eyebrow">O QUE FAZEMOS</div>
+
+          <h2 class="section-title">
+            Muito mais que um
+            <span class="gradient-text">site.</span>
+          </h2>
+
+          <p class="section-description">
+            A Xtrake trabalha na construção de produtos digitais completos. O
+            objetivo é transformar processos manuais em experiências digitais
+            mais simples, organizadas e escaláveis.
+          </p>
+        </div>
+
+        <div class="services-grid">
+          <article class="service reveal">
+            <div class="service-icon">🌐</div>
+
+            <h3>Sites profissionais</h3>
+
+            <p>
+              Sites rápidos, responsivos e pensados para apresentar o
+              restaurante, cardápio, localização, horários e canais de
+              atendimento.
+            </p>
+
+            <span class="service-number">01</span>
+          </article>
+
+          <article class="service reveal delay-1">
+            <div class="service-icon">🛒</div>
+
+            <h3>Pedidos online</h3>
+
+            <p>
+              Cardápio digital com carrinho, checkout, informações do cliente e
+              envio estruturado do pedido.
+            </p>
+
+            <span class="service-number">02</span>
+          </article>
+
+          <article class="service reveal delay-2">
+            <div class="service-icon">⚙️</div>
+
+            <h3>Sistemas personalizados</h3>
+
+            <p>
+              Sistemas desenvolvidos de acordo com a operação e as necessidades
+              específicas de cada negócio.
+            </p>
+
+            <span class="service-number">03</span>
+          </article>
+
+          <article class="service reveal">
+            <div class="service-icon">📊</div>
+
+            <h3>Painéis administrativos</h3>
+
+            <p>
+              Controle de produtos, pedidos, clientes, horários, informações e
+              operações em um único ambiente.
+            </p>
+
+            <span class="service-number">04</span>
+          </article>
+
+          <article class="service reveal delay-1">
+            <div class="service-icon">🔐</div>
+
+            <h3>Autenticação & segurança</h3>
+
+            <p>
+              Login, autorização, sessões, proteção de rotas e separação entre
+              diferentes níveis de acesso.
+            </p>
+
+            <span class="service-number">05</span>
+          </article>
+
+          <article class="service reveal delay-2">
+            <div class="service-icon">🔌</div>
+
+            <h3>APIs & integrações</h3>
+
+            <p>
+              Backends preparados para conectar pagamentos, bancos de dados,
+              serviços externos e futuras integrações.
+            </p>
+
+            <span class="service-number">06</span>
+          </article>
+        </div>
+      </section>
+
+      <!-- SOLUÇÕES -->
+
+      <section id="solucoes">
+        <div class="section-header reveal">
+          <div class="eyebrow">SOLUÇÕES PARA RESTAURANTES</div>
+
+          <h2 class="section-title">
+            Uma solução para cada
+            <span class="gradient-text">momento.</span>
+          </h2>
+
+          <p class="section-description">
+            Nem todo restaurante precisa de um sistema gigantesco. Por isso, a
+            Xtrake trabalha com diferentes níveis de solução, desde presença
+            digital até operações mais completas.
+          </p>
+        </div>
+
+        <div class="solutions">
+          <!-- SIMPLE -->
+
+          <article class="solution reveal">
+            <div class="solution-tag">01 / SIMPLE</div>
+
+            <h3>Simple</h3>
+
+            <p>
+              Para restaurantes que precisam de uma presença digital
+              profissional e objetiva.
+            </p>
+
+            <div class="solution-price">Projeto personalizado</div>
+
+            <ul>
+              <li>Site responsivo</li>
+              <li>Cardápio digital</li>
+              <li>Informações do restaurante</li>
+              <li>Horários e localização</li>
+              <li>Integração com WhatsApp</li>
+              <li>Hospedagem e publicação</li>
+            </ul>
+
+            <a href="#contato" class="btn btn-secondary">
+              Conhecer solução
+              <span class="arrow">→</span>
+            </a>
+          </article>
+
+          <!-- PRO -->
+
+          <article class="solution featured reveal delay-1">
+            <div class="solution-tag">02 / PRO</div>
+
+            <h3>Pro</h3>
+
+            <p>
+              Para negócios que querem transformar o site em um verdadeiro canal
+              de vendas.
+            </p>
+
+            <div class="solution-price">Sistema completo</div>
+
+            <ul>
+              <li>Cardápio digital</li>
+              <li>Carrinho de pedidos</li>
+              <li>Checkout</li>
+              <li>Painel administrativo</li>
+              <li>Gestão de pedidos</li>
+              <li>Banco de dados</li>
+              <li>Autenticação</li>
+              <li>Integrações</li>
+            </ul>
+
+            <a href="#contato" class="btn btn-primary">
+              Conhecer solução
+              <span class="arrow">→</span>
+            </a>
+          </article>
+
+          <!-- PREMIUM -->
+
+          <article class="solution reveal delay-2">
+            <div class="solution-tag">03 / PREMIUM</div>
+
+            <h3>Premium</h3>
+
+            <p>
+              Para operações que precisam de mais automação, controle e
+              estrutura tecnológica.
+            </p>
+
+            <div class="solution-price">Sob consulta</div>
+
+            <ul>
+              <li>Todos os recursos Pro</li>
+              <li>Pagamento online</li>
+              <li>Webhooks</li>
+              <li>Status dos pedidos</li>
+              <li>Relatórios</li>
+              <li>Integrações avançadas</li>
+              <li>Arquitetura escalável</li>
+              <li>Suporte e evolução</li>
+            </ul>
+
+            <a href="#contato" class="btn btn-secondary">
+              Falar sobre projeto
+              <span class="arrow">→</span>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <!-- PROCESSO -->
+
+      <section>
+        <div class="section-header reveal">
+          <div class="eyebrow">COMO FUNCIONA</div>
+
+          <h2 class="section-title">
+            Do problema ao
+            <span class="gradient-text">produto.</span>
+          </h2>
+        </div>
+
+        <div class="process">
+          <article class="process-item reveal">
+            <div class="process-number">01</div>
+
+            <h3>Entendimento</h3>
+
+            <p>
+              Entendemos como o restaurante funciona, quais são os processos e
+              onde a tecnologia pode ajudar.
+            </p>
+          </article>
+
+          <article class="process-item reveal delay-1">
+            <div class="process-number">02</div>
+
+            <h3>Planejamento</h3>
+
+            <p>
+              Definimos funcionalidades, arquitetura, experiência e estrutura
+              necessária para o projeto.
+            </p>
+          </article>
+
+          <article class="process-item reveal delay-2">
+            <div class="process-number">03</div>
+
+            <h3>Desenvolvimento</h3>
+
+            <p>
+              Frontend, backend, banco de dados, autenticação, APIs e
+              integrações são construídos em conjunto.
+            </p>
+          </article>
+
+          <article class="process-item reveal delay-3">
+            <div class="process-number">04</div>
+
+            <h3>Evolução</h3>
+
+            <p>
+              Depois da entrega, o sistema pode continuar evoluindo conforme as
+              necessidades do negócio.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- SISTEMA -->
+
+      <section>
+        <div class="system-showcase">
+          <div class="system-copy reveal">
+            <div class="eyebrow">POR TRÁS DO SISTEMA</div>
+
+            <h2>
+              Uma operação.
+              <span class="gradient-text"> Um sistema. </span>
+            </h2>
+
+            <p>
+              Um sistema da Xtrake pode conectar o cliente, restaurante,
+              pedidos, pagamentos e administração em uma única estrutura.
+            </p>
+
+            <div class="system-features">
+              <div class="system-feature">
+                <i></i>
+                Cliente realiza o pedido
+              </div>
+
+              <div class="system-feature">
+                <i></i>
+                Backend processa a operação
+              </div>
+
+              <div class="system-feature">
+                <i></i>
+                Banco de dados registra as informações
+              </div>
+
+              <div class="system-feature">
+                <i></i>
+                Pagamento pode ser integrado
+              </div>
+
+              <div class="system-feature">
+                <i></i>
+                Restaurante acompanha pelo painel
+              </div>
+
+              <div class="system-feature">
+                <i></i>
+                Status pode acompanhar o pedido
+              </div>
+            </div>
+          </div>
+
+          <div class="system-window reveal delay-2">
+            <div class="window-bar">
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
+
+            <div class="window-content">
+              <aside class="sidebar">
+                <div class="sidebar-logo">XTRAKE</div>
+
+                <div class="side-item active">Dashboard</div>
+
+                <div class="side-item">Pedidos</div>
+
+                <div class="side-item">Cardápio</div>
+
+                <div class="side-item">Clientes</div>
+
+                <div class="side-item">Relatórios</div>
+
+                <div class="side-item">Configurações</div>
+              </aside>
+
+              <div class="panel">
+                <div class="panel-head">
+                  <h4>Visão geral</h4>
+
+                  <span class="panel-date"> Hoje </span>
+                </div>
+
+                <div class="mini-stats">
+                  <div class="mini-stat">
+                    <small>Pedidos</small>
+                    <strong>128</strong>
+                  </div>
+
+                  <div class="mini-stat">
+                    <small>Clientes</small>
+                    <strong>86</strong>
+                  </div>
+
+                  <div class="mini-stat">
+                    <small>Receita</small>
+                    <strong>4.8k</strong>
+                  </div>
+                </div>
+
+                <div class="chart">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+
+                <div class="mini-stats">
+                  <div class="mini-stat">
+                    <small>Na fila</small>
+                    <strong>08</strong>
+                  </div>
+
+                  <div class="mini-stat">
+                    <small>Preparando</small>
+                    <strong>05</strong>
+                  </div>
+
+                  <div class="mini-stat">
+                    <small>Entregues</small>
+                    <strong>115</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cases" id="projetos">
+        <div class="section-header reveal">
+          <span class="section-tag">PROJETOS</span>
+
+          <h2>Projetos que já colocamos em produção.</h2>
+
+          <p>
+            Soluções desenvolvidas pela Xtrake para transformar a presença
+            digital e a operação de negócios.
+          </p>
+        </div>
+
+        <div class="cases-grid">
+          <!-- SABOR DA ALEGRIA -->
+          <article class="case-card reveal">
+            <div class="case-image">
+              <img src="./sabordaalegria.png" alt="Projeto Sabor da Alegria" />
+
+              <div class="case-badge">Projeto real</div>
+            </div>
+
+            <div class="case-content">
+              <div class="case-top">
+                <span class="case-category"> RESTAURANTE </span>
+
+                <span class="case-number"> 01 </span>
+              </div>
+
+              <h3>Sabor da Alegria</h3>
+
+              <p>
+                Site para restaurante com cardápio digital, informações do
+                estabelecimento e sistema administrativo para atualização dos
+                pratos.
+              </p>
+
+              <div class="case-tech">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>Node.js</span>
+                <span>Express</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- 341 BURGUER -->
+          <article class="case-card reveal">
+            <div class="case-image">
+              <img src="./341burguer.png" alt="Projeto 341 Burguer" />
+
+              <div class="case-badge">Projeto real</div>
+            </div>
+
+            <div class="case-content">
+              <div class="case-top">
+                <span class="case-category"> HAMBURGUERIA </span>
+
+                <span class="case-number"> 02 </span>
+              </div>
+
+              <h3>341 Burguer</h3>
+
+              <p>
+                Presença digital desenvolvida para uma hamburgueria, com foco em
+                apresentação dos produtos e experiência do cliente.
+              </p>
+
+              <div class="case-tech">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- TECNOLOGIA -->
+
+      <section id="tecnologia">
+        <div class="section-header reveal">
+          <div class="eyebrow">TECNOLOGIA</div>
+
+          <h2 class="section-title">
+            Construído com
+            <span class="gradient-text">tecnologia.</span>
+          </h2>
+
+          <p class="section-description">
+            A arquitetura é escolhida de acordo com o projeto. O objetivo não é
+            adicionar tecnologia por adicionar, mas construir uma solução
+            funcional, segura e preparada para crescer.
+          </p>
+        </div>
+
+        <div class="tech reveal">
+          <span>HTML</span>
+          <span>CSS</span>
+          <span>JavaScript</span>
+          <span>Vue</span>
+          <span>Node.js</span>
+          <span>Express</span>
+          <span>REST API</span>
+          <span>JWT</span>
+          <span>PostgreSQL</span>
+          <span>SQLite</span>
+          <span>Webhooks</span>
+          <span>Git</span>
+          <span>GitHub</span>
+          <span>Deploy</span>
+        </div>
+      </section>
+
+      <!-- CTA -->
+
+      <section id="contato">
+        <div class="cta reveal">
+          <div class="eyebrow">VAMOS CONSTRUIR</div>
+
+          <h2>
+            Seu restaurante pode
+            <span class="gradient-text"> ir além. </span>
+          </h2>
+
+          <p>
+            Conte para a Xtrake o que você precisa. Podemos começar com uma
+            solução simples e evoluir conforme o seu negócio cresce.
+          </p>
+
+          <a
+            href="https://wa.me/5547992691247"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            Falar com a Xtrake
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+
+    <footer>
+      <div class="footer-logo">Xtrake Software</div>
+
+      <p>© 2026 Xtrake Software. Software & Technology.</p>
+
+      <p>Sistemas para negócios que querem crescer.</p>
+    </footer>
+
+    <script>
+      /* ========================================
+       LOADER
+    ======================================== */
+
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.body.classList.add('loaded');
+        }, 500);
+      });
+
+      /* ========================================
+       HEADER
+    ======================================== */
+
+      const header = document.getElementById('header');
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 30) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+
+      /* ========================================
+       MOBILE MENU
+    ======================================== */
+
+      const menuBtn = document.getElementById('menuBtn');
+
+      menuBtn.addEventListener('click', () => {
+        header.classList.toggle('menu-open');
+        document.body.classList.toggle('menu-open');
+      });
+
+      document.querySelectorAll('.nav-links a').forEach((link) => {
+        link.addEventListener('click', () => {
+          header.classList.remove('menu-open');
+          document.body.classList.remove('menu-open');
+        });
+      });
+
+      /* ========================================
+       REVEAL ON SCROLL
+    ======================================== */
+
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.12,
+        },
+      );
+
+      document.querySelectorAll('.reveal').forEach((element) => {
+        revealObserver.observe(element);
+      });
+
+      /* ========================================
+       CURSOR GLOW
+    ======================================== */
+
+      const glow = document.querySelector('.cursor-glow');
+
+      let mouseX = 0;
+      let mouseY = 0;
+
+      let glowX = 0;
+      let glowY = 0;
+
+      window.addEventListener('mousemove', (event) => {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+      });
+
+      function animateGlow() {
+        glowX += (mouseX - glowX) * 0.08;
+        glowY += (mouseY - glowY) * 0.08;
+
+        glow.style.left = glowX + 'px';
+        glow.style.top = glowY + 'px';
+
+        requestAnimationFrame(animateGlow);
+      }
+
+      animateGlow();
+
+      /* ========================================
+       PARTICLES
+    ======================================== */
+
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+
+      let particles = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+
+      resizeCanvas();
+
+      for (let i = 0; i < 55; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 1.4 + 0.3,
+          speed: Math.random() * 0.25 + 0.05,
+          opacity: Math.random() * 0.4 + 0.1,
+        });
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach((p) => {
+          p.y -= p.speed;
+
+          if (p.y < -5) {
+            p.y = canvas.height + 5;
+          }
+
+          ctx.beginPath();
+
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+
+          ctx.fillStyle = `rgba(135,148,255,${p.opacity})`;
+
+          ctx.fill();
+        });
+
+        requestAnimationFrame(animateParticles);
+      }
+
+      animateParticles();
+
+      /* ========================================
+       COUNTER
+    ======================================== */
+
+      const counters = document.querySelectorAll('.counter');
+
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const counter = entry.target;
+
+          const target = Number(counter.dataset.target);
+
+          let current = 0;
+
+          const duration = 900;
+
+          const start = performance.now();
+
+          function update(time) {
+            const progress = Math.min((time - start) / duration, 1);
+
+            current = Math.floor(progress * target);
+
+            counter.textContent = current;
+
+            if (progress < 1) {
+              requestAnimationFrame(update);
+            }
+          }
+
+          requestAnimationFrame(update);
+
+          counterObserver.unobserve(counter);
+        });
+      });
+
+      counters.forEach((counter) => {
+        counterObserver.observe(counter);
+      });
+
+      /* ========================================
+       3D HERO PARALLAX
+    ======================================== */
+
+      const dashboard = document.querySelector('.hero-dashboard');
+
+      window.addEventListener('mousemove', (event) => {
+        if (window.innerWidth < 1000) return;
+
+        const x = event.clientX / window.innerWidth - 0.5;
+
+        const y = event.clientY / window.innerHeight - 0.5;
+
+        dashboard.style.transform = `
+        translateY(-50%)
+        rotateY(${x * -8}deg)
+        rotateX(${y * 6}deg)
+        `;
+      });
+
+      /* ========================================
+       SMOOTH BUTTON RIPPLE
+    ======================================== */
+
+      document.querySelectorAll('.btn').forEach((button) => {
+        button.addEventListener('click', (event) => {
+          const ripple = document.createElement('span');
+
+          ripple.style.position = 'absolute';
+          ripple.style.width = '10px';
+          ripple.style.height = '10px';
+          ripple.style.borderRadius = '50%';
+          ripple.style.background = 'rgba(255,255,255,.3)';
+          ripple.style.pointerEvents = 'none';
+
+          const rect = button.getBoundingClientRect();
+
+          ripple.style.left = event.clientX - rect.left + 'px';
+
+          ripple.style.top = event.clientY - rect.top + 'px';
+
+          ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+
+          button.appendChild(ripple);
+
+          ripple.animate(
+            [
+              {
+                transform: 'translate(-50%, -50%) scale(0)',
+                opacity: 0.8,
+              },
+              {
+                transform: 'translate(-50%, -50%) scale(18)',
+                opacity: 0,
+              },
+            ],
+            {
+              duration: 600,
+              easing: 'cubic-bezier(.22,1,.36,1)',
+            },
+          ).onfinish = () => {
+            ripple.remove();
+          };
+        });
+      });
+    </script>
+  </body>
+</html>
